@@ -24,11 +24,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
     implementation "io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.seleniumhq.selenium:selenium-java:3.14.0"
     testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '3.14.0'
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-api', version: '3.141.59'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.14.3'
     implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '3.4.0'
     implementation group: 'com.frimastudio', name: 'slf4j-kotlin-extensions', version: '2.0.0'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.10.0'
@@ -41,6 +38,26 @@ dependencies {
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.10.0'
     implementation group: 'com.applitools', name: 'eyes-common-java3', version: '3.160.0'
     implementation group: 'com.applitools', name: 'eyes-selenium-java3', version: '3.160.0'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+wrapper {
+    gradleVersion = "5.1.1"
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 compileKotlin {
