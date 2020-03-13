@@ -1,6 +1,7 @@
 package com.uitestcore.driverutils
 
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
@@ -14,10 +15,12 @@ import java.util.logging.Level
 
 object Driver {
     lateinit private var instance: WebDriver
+    lateinit var jsExecutor: JavascriptExecutor
     lateinit var baseUrl: String
 
     fun init(driverName: String, url: String) {
         instance = createDriver(driverName)
+        jsExecutor = instance as JavascriptExecutor
         baseUrl = url
     }
 
@@ -68,6 +71,10 @@ object Driver {
 
     fun findElements(by: By): List<WebElement> {
         return instance.findElements(by)
+    }
+
+    fun scrollToElement(element: Any) {
+        jsExecutor.executeScript((element as WebElement).toString() + ".scrollIntoView()")
     }
 
     private fun createDriver(driverName: String): WebDriver {
