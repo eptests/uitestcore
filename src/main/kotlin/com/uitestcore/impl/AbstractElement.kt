@@ -1,5 +1,6 @@
 package com.uitestcore.impl
 
+import com.uitestcore.driverutils.Driver
 import com.uitestcore.elementobjects.Element
 import org.openqa.selenium.WebElement
 import java.lang.Exception
@@ -15,4 +16,7 @@ internal abstract class AbstractElement protected constructor(protected val wrap
         catch (ex: Exception) {
             false
         }
+    override fun scrollTo() {
+        Driver.scrollToElement(wrappedElement)
+    }
 }

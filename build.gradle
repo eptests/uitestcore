@@ -38,8 +38,6 @@ dependencies {
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.1.8'
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-test-testng', version: '1.3.60'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.10.0'
-    implementation group: 'com.applitools', name: 'eyes-common-java3', version: '3.160.0'
-    implementation group: 'com.applitools', name: 'eyes-selenium-java3', version: '3.160.0'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -67,4 +65,11 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+test {
+    useTestNG() {
+        // runlist to executed. path is relative to current folder
+        useDefaultListeners = true // Tells TestNG to execute its default reporting structure
+    }
 }

@@ -73,8 +73,8 @@ object Driver {
         return instance.findElements(by)
     }
 
-    fun scrollToElement(element: Any) {
-        jsExecutor.executeScript((element as WebElement).toString() + ".scrollIntoView()")
+    fun scrollToElement(element: WebElement) {
+        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
     }
 
     private fun createDriver(driverName: String): WebDriver {
