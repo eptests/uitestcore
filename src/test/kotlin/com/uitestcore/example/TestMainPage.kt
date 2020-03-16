@@ -10,7 +10,8 @@ class TestMainPage : TestInit() {
     fun test() {
         Driver.openPage()
         mainPage = MainPage()
-        mainPage.clickBtn()
+        mainPage.enterTextAndAccept("kotlin")
+        ResultsPage().clickNext()
     }
 
 }

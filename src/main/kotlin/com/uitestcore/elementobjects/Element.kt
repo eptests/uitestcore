@@ -4,6 +4,4 @@ interface Element {
     val isDisplayed: Boolean
 
     val isExists: Boolean
-
-    fun scrollTo()
 }

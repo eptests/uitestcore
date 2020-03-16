@@ -16,7 +16,8 @@ internal abstract class AbstractElement protected constructor(protected val wrap
         catch (ex: Exception) {
             false
         }
-    override fun scrollTo() {
+    
+    fun scrollTo() {
         Driver.scrollToElement(wrappedElement)
     }
 }
