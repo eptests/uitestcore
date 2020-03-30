@@ -13,15 +13,24 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.awt.Robot
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+import java.awt.event.KeyEvent
+
 object Driver {
     lateinit private var instance: WebDriver
     lateinit var jsExecutor: JavascriptExecutor
     lateinit var baseUrl: String
+    lateinit var robot: Robot
 
     fun init(driverName: String, url: String) {
         instance = createDriver(driverName)
         jsExecutor = instance as JavascriptExecutor
         baseUrl = url
+        robot = Robot()
     }
 
     fun get(): WebDriver {
@@ -73,8 +82,27 @@ object Driver {
         return instance.findElements(by)
     }
 
+    /* TO DO: return decorated web element
+    fun <C : Container> findDecorated(containerClass: Class<C>, by: By): Any? {
+        return ExtendedFieldDecorator(instance).decorate(containerClass.getClassLoader(), field)
+    }*/
+
     fun scrollToElement(element: WebElement) {
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
+    }
+
+    fun uploadImage(element: WebElement, filePath: String) {
+        val resourceDirectory: Path = Paths.get("src", "test", "resources")
+        val absolutePath: String = resourceDirectory.toFile().absolutePath
+        element!!.click()
+
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(StringSelection(absolutePath + filePath), null)
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
     }
 
     private fun createDriver(driverName: String): WebDriver {
