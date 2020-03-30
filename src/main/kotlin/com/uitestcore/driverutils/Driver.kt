@@ -91,7 +91,7 @@ object Driver {
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
     }
 
-    fun uploadImage(element: WebElement, filePath: String) {
+    fun uploadFile(element: WebElement, filePath: String) {
         val resourceDirectory: Path = Paths.get("src", "test", "resources")
         val absolutePath: String = resourceDirectory.toFile().absolutePath
         element!!.click()
