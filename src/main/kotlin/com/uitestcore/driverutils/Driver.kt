@@ -96,7 +96,7 @@ object Driver {
         val absolutePath: String = resourceDirectory.toFile().absolutePath
         element!!.click()
 
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(StringSelection(absolutePath + filePath), null)
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(absolutePath + filePath), null)
         robot.keyPress(KeyEvent.VK_CONTROL);
         robot.keyPress(KeyEvent.VK_V);
         robot.keyRelease(KeyEvent.VK_V);
