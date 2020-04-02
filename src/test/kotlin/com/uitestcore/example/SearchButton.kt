@@ -5,14 +5,10 @@ import com.uitestcore.elementobjects.Button
 import org.openqa.selenium.support.FindBy
 
 class SearchButton : AbstractContainer() {
-    @FindBy(name="btnK")
+    @FindBy(css="[value='Поиск в Google']")
     private val searchBtn: Button? = null
 
     fun clickSearch() {
         searchBtn!!.click()
-    }
-
-    fun clickLucky() {
-
     }
 }

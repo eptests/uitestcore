@@ -1,5 +1,6 @@
 package com.uitestcore.containers
 
+import com.uitestcore.driverutils.Driver
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 
@@ -22,5 +23,9 @@ abstract class AbstractContainer : Container {
 
     fun findElements(by: By): List<WebElement> {
         return this.wrappedElement!!.findElements(by)
+    }
+
+    override fun scrollTo() {
+        Driver.scrollToElement(wrappedElement!!)
     }
 }

@@ -5,6 +5,7 @@ import com.uitestcore.containers.DefaultContainerFactory
 import com.uitestcore.elementobjects.Element
 import com.uitestcore.impl.DefaultElementFactory
 import org.openqa.selenium.SearchContext
+import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindAll
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.FindBys
@@ -16,53 +17,40 @@ import java.lang.Exception
 import java.lang.reflect.*
 
 
-class ExtendedFieldDecorator(searchContext: SearchContext) :
-    DefaultFieldDecorator(DefaultElementLocatorFactory(searchContext)) {
+class WebElementDecorator {
     private val elementFactory = DefaultElementFactory()
     private val containerFactory = DefaultContainerFactory()
 
-    override fun decorate(loader: ClassLoader, field: Field): Any? {
-        if (Container::class.java!!.isAssignableFrom(field.type)) {
-            return decorateContainer(loader, field)
+    fun <T> decorate(clazz: Class<T>, wrappedElement: WebElement): Any? {
+        if (Container::class.java!!.isAssignableFrom(clazz)) {
+            return decorateContainer(wrappedElement, clazz)
         }
-        if (Element::class.java.isAssignableFrom(field.type)) {
-            return decorateElement(loader, field)
+        if (Element::class.java.isAssignableFrom(clazz)) {
+            return decorateElement(wrappedElement, clazz)
         }
-        if (List::class.java.isAssignableFrom(field.type)) {
-            return decorateList(loader, field)
-        }
-        return super.decorate(loader, field)
+        return wrappedElement
     }
 
-    private fun checkAnnotations(field: Field): Boolean {
-        if (field.getAnnotation(FindBy::class.java) == null &&
-            field.getAnnotation(FindBys::class.java) == null &&
-            field.getAnnotation(FindAll::class.java) == null) {
-            return false
+    fun <T> decorate(clazz: Class<T>, wrappedElement: List<WebElement>): Any? {
+        if (List::class.java.isAssignableFrom(clazz)) {
+            return decorateList(wrappedElement, clazz)
         }
-        return true
+        return wrappedElement
     }
 
-    private fun decorateElement(loader: ClassLoader, field: Field): Any {
-        val wrappedElement = proxyForLocator(loader, createLocator(field))
-        return elementFactory.create(field.type as Class<out Element>, wrappedElement)
+    private fun <T> decorateElement(wrappedElement: WebElement, clazz: Class<T>): Any {
+        return elementFactory.create(clazz as Class<out Element>, wrappedElement)
     }
 
-    private fun createLocator(field: Field): ElementLocator {
-        return factory.createLocator(field)
-    }
-
-    private fun decorateContainer(loader: ClassLoader, field: Field): Any {
-        val wrappedElement = proxyForLocator(loader, createLocator(field))
-        val container = containerFactory.create(field.type as Class<out Container>, wrappedElement)
+    private fun <T> decorateContainer(wrappedElement: WebElement, clazz: Class<T>): Any {
+        val container = containerFactory.create(clazz as Class<out Container>, wrappedElement)
 
         PageFactory.initElements(ExtendedFieldDecorator(wrappedElement), container)
         return container
     }
 
-    private fun decorateList(loader: ClassLoader, field: Field): Any {
-        val wrappedElementList = proxyForListLocator(loader, createLocator(field))
-        val genericType: Type = field.genericType
+    private fun <T> decorateList(wrappedElementList: List<WebElement>, type: Class<T>): Any {
+        val genericType: Type = type.genericSuperclass
         if (genericType is ParameterizedType) {
             var clazz: Class<*>? = null
             try {

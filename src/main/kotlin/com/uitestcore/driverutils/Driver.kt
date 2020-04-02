@@ -19,12 +19,13 @@ import java.awt.Robot
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
+import java.lang.reflect.Field
 
 object Driver {
-    lateinit private var instance: WebDriver
-    lateinit var jsExecutor: JavascriptExecutor
-    lateinit var baseUrl: String
-    lateinit var robot: Robot
+    private lateinit var instance: WebDriver
+    private lateinit var baseUrl: String
+    private lateinit var jsExecutor: JavascriptExecutor
+    private lateinit var robot: Robot
 
     fun init(driverName: String, url: String) {
         instance = createDriver(driverName)
@@ -82,13 +83,20 @@ object Driver {
         return instance.findElements(by)
     }
 
-    /* TO DO: return decorated web element
-    fun <C : Container> findDecorated(containerClass: Class<C>, by: By): Any? {
-        return ExtendedFieldDecorator(instance).decorate(containerClass.getClassLoader(), field)
-    }*/
+    fun <C> findDecoratedElement(clazz: Class<C>, by: By): Any? {
+        return WebElementDecorator().decorate(clazz, this.findElement(by))
+    }
+
+    fun <C> findDecoratedElements(clazz: Class<C>, by: By): Any? {
+        return WebElementDecorator().decorate(clazz, this.findElements(by))
+    }
 
     fun scrollToElement(element: WebElement) {
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
+    }
+
+    fun pause(time: Long) {
+        Thread.sleep(time * 1000)
     }
 
     fun uploadFile(element: WebElement, filePath: String) {

@@ -2,8 +2,8 @@ package com.uitestcore.example
 
 import com.uitestcore.driverutils.Driver
 import com.uitestcore.elementobjects.Button
-import com.uitestcore.elementobjects.TextField
 import com.uitestcore.pageobjects.BasePage
+import org.openqa.selenium.By
 import org.openqa.selenium.support.FindBy
 
 class ResultsPage : BasePage() {
@@ -19,7 +19,12 @@ class ResultsPage : BasePage() {
     }
 
     fun clickNext() {
+        nextBtn!!.scrollTo()
         nextBtn!!.click()
+    }
+
+    fun getResults(): List<SearchResultBlock> {
+        return Driver.findDecoratedElements(SearchResultBlock().javaClass, By.cssSelector(".g")) as List<SearchResultBlock>
     }
 
 }
