@@ -22,7 +22,12 @@ object Common {
         wait.until(ExpectedConditions.visibilityOfElementLocated(selector))
     }
 
-    fun getElementsCount(){
-
+    fun isElementBecomeVisible(selector: By) : Boolean {
+        return try {
+            waitElementVisible(selector)
+            true
+        } catch (ex: Exception) {
+            false
+        }
     }
 }
