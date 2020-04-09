@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement
 
 internal class TextImpl protected constructor(wrappedElement: WebElement?) :
     AbstractElement(wrappedElement!!), Text {
-    override fun type(text: String) {
-        wrappedElement.sendKeys(text)
+    override fun text() {
+        wrappedElement.text
     }
 }
