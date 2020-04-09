@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.logging.LogType
 import org.openqa.selenium.logging.LoggingPreferences
 import org.openqa.selenium.remote.CapabilityType
+import org.openqa.selenium.support.ui.ExpectedConditions.urlToBe
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
@@ -110,6 +111,10 @@ object Driver {
         robot.keyRelease(KeyEvent.VK_CONTROL);
         robot.keyPress(KeyEvent.VK_ENTER);
         robot.keyRelease(KeyEvent.VK_ENTER);
+    }
+
+    fun waitToRedirection(url: String) {
+        Wait.until(urlToBe(url))
     }
 
     private fun createDriver(driverName: String): WebDriver {
