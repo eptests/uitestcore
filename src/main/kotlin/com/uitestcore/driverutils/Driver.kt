@@ -126,6 +126,7 @@ object Driver {
         val logPrefs = LoggingPreferences()
         logPrefs.enable(LogType.PERFORMANCE, Level.ALL)
         options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs)
+        options.addArguments("--headless")
         val prefs: MutableMap<String, Any> = HashMap()
         prefs["profile.default_content_setting_values.notifications"] = 2
         options.setExperimentalOption("prefs", prefs)
