@@ -84,6 +84,18 @@ object Logger {
         logs.append("*********************************\n");*/return logs
     }
 
+    fun actionOnTestComplete(testResult: Int, testName: String) {
+        if (testResult == 2) {
+            Logger.actionOnFailure(testName)
+        }
+    }
+
+    fun actionOnFailure(testName: String) {
+        Logger.takeScreenshotToReport(testName)
+        Logger.getConsoleLogs()
+        Logger.getPageSource()
+    }
+
     /**
      * Приложить скриншот к отчету allure.
      * @param screenshotPath - путь к скришоту.

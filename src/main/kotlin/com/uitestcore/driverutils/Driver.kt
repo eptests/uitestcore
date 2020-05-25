@@ -21,17 +21,58 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
 
+import com.uitestcore.driverutils.DriverSettings.BROWSER
+import com.uitestcore.driverutils.DriverSettings.PARAMS
+import com.uitestcore.driverutils.DriverSettings.IMPLICIT_WAIT
+import com.uitestcore.driverutils.DriverSettings.URL
+import io.github.bonigarcia.wdm.WebDriverManager
+
 object Driver {
     private lateinit var instance: WebDriver
     private lateinit var baseUrl: String
     private lateinit var jsExecutor: JavascriptExecutor
     private lateinit var robot: Robot
 
-    fun init(driverName: String, url: String) {
-        instance = createDriver(driverName)
-        jsExecutor = instance as JavascriptExecutor
+    fun init(url: String) {
         baseUrl = url
+        init()
+    }
+
+    fun init() {
+        DriverSettings.initFromProfile()
+        instance = createDriver(BROWSER)
+        jsExecutor = instance as JavascriptExecutor
         robot = Robot()
+        if (!this::baseUrl.isInitialized) {
+            baseUrl = URL!!
+        }
+    }
+
+    private fun createDriver(driverName: String): WebDriver {
+        var driver = when(driverName)
+        {
+            "chrome" -> initChrome()
+            //"ff" -> return initFF(params)
+            else -> throw Exception("Browser name is incorrect!")
+        }
+        return  driver
+    }
+
+    private fun initChrome(): WebDriver {
+        WebDriverManager.chromedriver().setup()
+        val options = ChromeOptions()
+        val logPrefs = LoggingPreferences()
+        logPrefs.enable(LogType.PERFORMANCE, Level.ALL)
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs)
+        PARAMS.forEach{
+            options.addArguments(it)
+        }
+        val prefs: MutableMap<String, Any> = HashMap()
+        prefs["profile.default_content_setting_values.notifications"] = 2
+        options.setExperimentalOption("prefs", prefs)
+        val driver: WebDriver = ChromeDriver(options)
+        driver.manage().timeouts().implicitlyWait(IMPLICIT_WAIT, TimeUnit.SECONDS);
+        return driver
     }
 
     fun get(): WebDriver {
@@ -115,23 +156,5 @@ object Driver {
 
     fun waitToRedirection(url: String) {
         Wait.until(urlToBe(url))
-    }
-
-    private fun createDriver(driverName: String): WebDriver {
-        return initChrome()
-    }
-
-    private fun initChrome(): WebDriver {
-        val options = ChromeOptions()
-        val logPrefs = LoggingPreferences()
-        logPrefs.enable(LogType.PERFORMANCE, Level.ALL)
-        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs)
-        options.addArguments("--headless")
-        val prefs: MutableMap<String, Any> = HashMap()
-        prefs["profile.default_content_setting_values.notifications"] = 2
-        options.setExperimentalOption("prefs", prefs)
-        val driver: WebDriver = ChromeDriver(options)
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        return driver
     }
 }
