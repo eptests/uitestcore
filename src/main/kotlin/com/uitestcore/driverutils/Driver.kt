@@ -14,12 +14,12 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 
-import java.nio.file.Path
+/*import java.nio.file.Path
 import java.nio.file.Paths
 import java.awt.Robot
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
-import java.awt.event.KeyEvent
+import java.awt.event.KeyEvent*/
 
 import com.uitestcore.driverutils.DriverSettings.BROWSER
 import com.uitestcore.driverutils.DriverSettings.PARAMS
@@ -31,7 +31,7 @@ object Driver {
     private lateinit var instance: WebDriver
     private lateinit var baseUrl: String
     private lateinit var jsExecutor: JavascriptExecutor
-    private lateinit var robot: Robot
+    //private lateinit var robot: Robot
 
     fun init(url: String) {
         baseUrl = url
@@ -42,7 +42,7 @@ object Driver {
         DriverSettings.initFromProfile()
         instance = createDriver(BROWSER)
         jsExecutor = instance as JavascriptExecutor
-        robot = Robot()
+        //robot = Robot()
         if (!this::baseUrl.isInitialized) {
             baseUrl = URL!!
         }
@@ -140,7 +140,8 @@ object Driver {
         Thread.sleep(time * 1000)
     }
 
-    fun uploadFile(element: WebElement, filePath: String) {
+    //Doesn't work in headless mode
+    /*fun uploadFile(element: WebElement, filePath: String) {
         val resourceDirectory: Path = Paths.get("src", "test", "resources")
         val absolutePath: String = resourceDirectory.toFile().absolutePath
         element!!.click()
@@ -152,7 +153,7 @@ object Driver {
         robot.keyRelease(KeyEvent.VK_CONTROL);
         robot.keyPress(KeyEvent.VK_ENTER);
         robot.keyRelease(KeyEvent.VK_ENTER);
-    }
+    }*/
 
     fun waitToRedirection(url: String) {
         Wait.until(urlToBe(url))
