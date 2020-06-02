@@ -26,6 +26,7 @@ import com.uitestcore.driverutils.DriverSettings.PARAMS
 import com.uitestcore.driverutils.DriverSettings.IMPLICIT_WAIT
 import com.uitestcore.driverutils.DriverSettings.URL
 import io.github.bonigarcia.wdm.WebDriverManager
+import io.qameta.allure.Step
 
 object Driver {
     private lateinit var instance: WebDriver
@@ -84,58 +85,72 @@ object Driver {
         instance.manage().window().maximize()
     }
 
+    @Step("Open base page")
     fun openPage() {
         instance.get(baseUrl)
     }
 
+    @Step("Open {path} page")
     fun openPage(path: String) {
         instance.get(baseUrl+path)
     }
 
+    @Step("Reload page")
     fun reloadPage() {
         instance.navigate().refresh()
     }
 
+    @Step("Get element {id}")
     fun getElementById(id: String): WebElement{
         return instance.findElement(By.id(id));
     }
 
+    @Step("Get element {css}")
     fun getElementByCss(css: String): WebElement{
         return instance.findElement(By.cssSelector(css));
     }
 
+    @Step("Get element {xpath}")
     fun getElementByXpath(xpath: String): WebElement{
         return instance.findElement(By.xpath(xpath));
     }
 
+    @Step("get element {name}")
     fun getElementByName(name: String): WebElement{
         return instance.findElement(By.name(name));
     }
 
+    @Step("Get element with text {text}")
     fun getElementByText(text: String): WebElement{
         return instance.findElement(By.linkText(text));
     }
 
+    @Step("Get element {by}")
     fun findElement(by: By): WebElement {
         return instance.findElement(by)
     }
 
+    @Step("Get elements {by}")
     fun findElements(by: By): List<WebElement> {
         return instance.findElements(by)
     }
 
+    @Step("Get element {by} with class {clazz.name}")
     fun <C> findDecoratedElement(clazz: Class<C>, by: By): Any? {
         return WebElementDecorator().decorate(clazz, this.findElement(by))
     }
 
+    @Step("Get elements {by} with class {clazz.name}")
     fun <C> findDecoratedElements(clazz: Class<C>, by: By): Any? {
         return WebElementDecorator().decorate(clazz, this.findElements(by))
     }
 
+    @Step("Scroll to element {element}")
     fun scrollToElement(element: WebElement) {
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
     }
 
+    @Step("Browser pause {time}")
     fun pause(time: Long) {
         Thread.sleep(time * 1000)
     }
@@ -155,6 +170,7 @@ object Driver {
         robot.keyRelease(KeyEvent.VK_ENTER);
     }*/
 
+    @Step("Wait to redirect to url {url}")
     fun waitToRedirection(url: String) {
         Wait.until(urlToBe(url))
     }
