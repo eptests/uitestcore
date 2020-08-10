@@ -13,4 +13,8 @@ internal class LinkImpl protected constructor(wrappedElement: WebElement?) :
     override fun text(): String {
         return wrappedElement.text
     }
+
+    override fun href(): String {
+        return wrappedElement.getAttribute("href")
+    }
 }
