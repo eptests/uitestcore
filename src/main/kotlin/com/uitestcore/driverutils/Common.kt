@@ -30,4 +30,8 @@ object Common {
             false
         }
     }
+
+    fun imagePathByOs(imageName: String) : String {
+        return ( if (System.getProperty("os.name").toString() == "Windows") {"\\${imageName}"} else {"/${imageName}"} ).toString()
+    }
 }
