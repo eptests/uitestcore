@@ -15,7 +15,9 @@ class TestMainPage : TestInit() {
         mainPage.enterTextAndAccept("kotlin")
         val resultsPage = ResultsPage()
         val results = resultsPage.getResults()
+        val result = resultsPage.getResult()
         assert.assertEquals(results.size, 10)
+        result.getText()
         resultsPage.clickNext()
         assert.assertAll()
     }

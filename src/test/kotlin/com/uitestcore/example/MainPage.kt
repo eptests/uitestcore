@@ -1,16 +1,13 @@
 package com.uitestcore.example
 
 import com.uitestcore.driverutils.Driver
-import com.uitestcore.elementobjects.Button
 import com.uitestcore.elementobjects.TextField
 import com.uitestcore.pageobjects.BasePage
+import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 
 class MainPage : BasePage() {
-    @FindBy(css=".FPdoLc.tfB0Bf")
-    private val searchBtn: SearchButton? = null
-
     @FindBy(css="input.gLFyf")
     private val searchField: TextField? = null
 
@@ -27,8 +24,7 @@ class MainPage : BasePage() {
 
     fun enterTextAndAccept(text: String) {
         searchField!!.clearAndType(text)
-        logo!!.click()
-        searchBtn!!.clickSearch()
+        Driver.findElement(By.cssSelector("[value='Поиск в Google']")).click()
     }
 
 }

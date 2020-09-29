@@ -3,6 +3,7 @@ package com.uitestcore.containers
 import com.uitestcore.driverutils.Driver
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.WrapsElement
 
 abstract class AbstractContainer : Container {
     var wrappedElement: WebElement? = null
@@ -18,7 +19,7 @@ abstract class AbstractContainer : Container {
     }
 
     fun findElement(by: By): WebElement {
-        return this.wrappedElement!!.findElement(by)
+        return (this.wrappedElement as WrapsElement).wrappedElement.findElement(by)
     }
 
     fun findElements(by: By): List<WebElement> {

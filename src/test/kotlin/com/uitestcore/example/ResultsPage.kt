@@ -23,6 +23,10 @@ class ResultsPage : BasePage() {
         nextBtn!!.click()
     }
 
+    fun getResult(): SearchResultBlock {
+        return Driver.findDecoratedElement(SearchResultBlock().javaClass, By.cssSelector(".g")) as SearchResultBlock
+    }
+
     fun getResults(): List<SearchResultBlock> {
         return Driver.findDecoratedElements(SearchResultBlock().javaClass, By.cssSelector(".g")) as List<SearchResultBlock>
     }
