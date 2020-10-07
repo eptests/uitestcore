@@ -11,7 +11,7 @@ class DefaultContainerFactory : ContainerFactory {
 
     private fun <C : Container> createInstanceOf(containerClass: Class<C>): C {
         try {
-            return containerClass.newInstance()
+            return containerClass.getDeclaredConstructor().newInstance()
         } catch (e: InstantiationException) {
             throw RuntimeException(e)
         } catch (e: IllegalAccessException) {

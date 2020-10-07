@@ -1,65 +1,59 @@
 package com.uitestcore.driverutils
 
+import com.uitestcore.containers.AbstractContainer
 import com.uitestcore.containers.Container
 import com.uitestcore.containers.DefaultContainerFactory
 import com.uitestcore.elementobjects.Element
 import com.uitestcore.impl.DefaultElementFactory
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.PageFactory
-import java.lang.Exception
-import java.lang.reflect.*
+import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
-
+@Suppress("UNCHECKED_CAST")
 class WebElementDecorator {
     private val elementFactory = DefaultElementFactory()
     private val containerFactory = DefaultContainerFactory()
 
-    fun <T> decorate(clazz: Class<T>, wrappedElement: WebElement): Any? {
-        if (Container::class.java!!.isAssignableFrom(clazz)) {
-            return decorateContainer(wrappedElement, clazz)
-        }
-        if (Element::class.java.isAssignableFrom(clazz)) {
-            return decorateElement(wrappedElement, clazz)
-        }
-        return wrappedElement
+    fun <T : Any> decorate(clazz: KClass<T>, wrappedElement: WebElement): T {
+        if (clazz.isSubclassOf(AbstractContainer::class))
+            return decorateContainer(clazz, wrappedElement) as T
+        else if (clazz.isSubclassOf(Element::class))
+            return elementFactory.create(clazz.java as Class<out Element>, wrappedElement) as T
+        else throw Exception("Cannot find element")
     }
 
-    fun <T> decorate(clazz: Class<T>, wrappedElement: List<WebElement>): Any? {
-        return decorateList(wrappedElement, clazz)
+    fun <T : Any> decorate(clazz: KClass<T>, wrappedElement: List<WebElement>): List<T> {
+        return decorateList(clazz, wrappedElement)
     }
 
-    private fun <T> decorateElement(wrappedElement: WebElement, clazz: Class<T>): Any {
-        return elementFactory.create(clazz as Class<out Element>, wrappedElement)
-    }
-
-    private fun <T> decorateContainer(wrappedElement: WebElement, clazz: Class<T>): Any {
-        val container = containerFactory.create(clazz as Class<out Container>, wrappedElement)
+    private fun <T : Any> decorateContainer(clazz: KClass<T>, wrappedElement: WebElement): Any {
+        val container = containerFactory.create(clazz.java as Class<out Container>, wrappedElement)
 
         PageFactory.initElements(ExtendedFieldDecorator(wrappedElement), container)
+        container.init(wrappedElement)
         return container
     }
 
-    private fun <T> decorateList(wrappedElementList: List<WebElement>, clazz: Class<T>): List<Any> {
-
-            if (clazz != null) {
-                if (Container::class.java!!.isAssignableFrom(clazz)) {
-                    var returnList = mutableListOf<Any>()
-                    for (wrappedElement in wrappedElementList!!) {
-                        val container = containerFactory.create(clazz as Class<out Container>, wrappedElement)
-                        returnList.add(container)
-                        PageFactory.initElements(ExtendedFieldDecorator(wrappedElement), container)
-                    }
-                    return returnList
-                }
-                if (Element::class.java.isAssignableFrom(clazz)) {
-                    var returnList = mutableListOf<Any>()
-                    for (wrappedElement in wrappedElementList!!) {
-                        var element = elementFactory.create(clazz as Class<out Element>, wrappedElement)
-                        returnList.add(element)
-                    }
-                    return returnList
-                }
+    private fun <T : Any> decorateList(clazz: KClass<T>, wrappedElementList: List<WebElement>): List<T> {
+        if (clazz.isSubclassOf(AbstractContainer::class)) {
+            val returnList = mutableListOf<Any>()
+            for (wrappedElement in wrappedElementList) {
+                val container = containerFactory.create(clazz.java as Class<out Container>, wrappedElement)
+                returnList.add(container)
+                PageFactory.initElements(ExtendedFieldDecorator(wrappedElement), container)
+                container.init(wrappedElement)
             }
-            return wrappedElementList
+            return returnList.toList() as List<T>
+        }
+        if (clazz.isSubclassOf(Element::class)) {
+                val returnList = mutableListOf<T>()
+                for (wrappedElement in wrappedElementList) {
+                val element = elementFactory.create(clazz.java as Class<out Element>, wrappedElement) as T
+                returnList.add(element)
+            }
+            return returnList.toList()
+        }
+        throw Exception("Cannot find list of elements")
     }
 }

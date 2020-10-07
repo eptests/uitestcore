@@ -2,6 +2,7 @@ package com.uitestcore.example
 
 import com.uitestcore.containers.AbstractContainer
 import com.uitestcore.elementobjects.Button
+import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 
 class SearchButton : AbstractContainer() {

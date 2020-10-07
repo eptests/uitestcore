@@ -27,6 +27,7 @@ import com.uitestcore.driverutils.DriverSettings.IMPLICIT_WAIT
 import com.uitestcore.driverutils.DriverSettings.URL
 import io.github.bonigarcia.wdm.WebDriverManager
 import io.qameta.allure.Step
+import kotlin.reflect.KClass
 
 object Driver {
     private lateinit var instance: WebDriver
@@ -50,13 +51,12 @@ object Driver {
     }
 
     private fun createDriver(driverName: String): WebDriver {
-        var driver = when(driverName)
+        return when(driverName)
         {
             "chrome" -> initChrome()
             //"ff" -> return initFF(params)
             else -> throw Exception("Browser name is incorrect!")
         }
-        return  driver
     }
 
     private fun initChrome(): WebDriver {
@@ -72,7 +72,7 @@ object Driver {
         prefs["profile.default_content_setting_values.notifications"] = 2
         options.setExperimentalOption("prefs", prefs)
         val driver: WebDriver = ChromeDriver(options)
-        driver.manage().timeouts().implicitlyWait(IMPLICIT_WAIT, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(IMPLICIT_WAIT, TimeUnit.SECONDS)
         return driver
     }
 
@@ -102,27 +102,27 @@ object Driver {
 
     @Step("Get element {id}")
     fun getElementById(id: String): WebElement{
-        return instance.findElement(By.id(id));
+        return instance.findElement(By.id(id))
     }
 
     @Step("Get element {css}")
     fun getElementByCss(css: String): WebElement{
-        return instance.findElement(By.cssSelector(css));
+        return instance.findElement(By.cssSelector(css))
     }
 
     @Step("Get element {xpath}")
     fun getElementByXpath(xpath: String): WebElement{
-        return instance.findElement(By.xpath(xpath));
+        return instance.findElement(By.xpath(xpath))
     }
 
     @Step("get element {name}")
     fun getElementByName(name: String): WebElement{
-        return instance.findElement(By.name(name));
+        return instance.findElement(By.name(name))
     }
 
     @Step("Get element with text {text}")
     fun getElementByText(text: String): WebElement{
-        return instance.findElement(By.linkText(text));
+        return instance.findElement(By.linkText(text))
     }
 
     @Step("Get element {by}")
@@ -135,13 +135,13 @@ object Driver {
         return instance.findElements(by)
     }
 
-    @Step("Get element {by} with class {clazz.name}")
-    fun <C> findDecoratedElement(clazz: Class<C>, by: By): Any? {
+    @Step("Get element {by} with class {T}")
+    fun <T : Any> findDecoratedElement(clazz: KClass<T>, by: By): T {
         return WebElementDecorator().decorate(clazz, this.findElement(by))
     }
 
     @Step("Get elements {by} with class {clazz.name}")
-    fun <C> findDecoratedElements(clazz: Class<C>, by: By): Any? {
+    fun <T : Any> findDecoratedElements(clazz: KClass<T>, by: By): List<T> {
         return WebElementDecorator().decorate(clazz, this.findElements(by))
     }
 

@@ -1,6 +1,7 @@
 package com.uitestcore.example
 
 import com.uitestcore.driverutils.Driver
+import com.uitestcore.elementobjects.Button
 import com.uitestcore.elementobjects.TextField
 import com.uitestcore.pageobjects.BasePage
 import org.openqa.selenium.By
@@ -24,7 +25,7 @@ class MainPage : BasePage() {
 
     fun enterTextAndAccept(text: String) {
         searchField!!.clearAndType(text)
-        Driver.findElement(By.cssSelector("[value='Поиск в Google']")).click()
+        Driver.findDecoratedElement(Button::class, By.cssSelector("[value='Поиск в Google']")).click()
     }
 
 }

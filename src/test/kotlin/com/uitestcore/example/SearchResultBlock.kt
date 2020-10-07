@@ -1,7 +1,6 @@
 package com.uitestcore.example
 
 import com.uitestcore.containers.AbstractContainer
-import com.uitestcore.elementobjects.Button
 import com.uitestcore.elementobjects.Link
 import com.uitestcore.elementobjects.Text
 import org.openqa.selenium.By
