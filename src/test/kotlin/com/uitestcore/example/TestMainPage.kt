@@ -1,7 +1,9 @@
 package com.uitestcore.example
 
+import com.uitestcore.driverutils.CookieProfileReader
 import org.testng.annotations.Test
 import com.uitestcore.driverutils.Driver
+import com.uitestcore.driverutils.DriverSettings
 import org.testng.asserts.SoftAssert
 
 class TestMainPage : TestInit() {
@@ -13,6 +15,8 @@ class TestMainPage : TestInit() {
         Driver.openPage()
         mainPage = MainPage()
         mainPage.enterTextAndAccept("kotlin")
+        val cookies = CookieProfileReader.readProfile("userprofile")
+        Driver.setCookies(cookies)
         val resultsPage = ResultsPage()
         val result = resultsPage.getResult()
         val results = resultsPage.getResults()

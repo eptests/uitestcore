@@ -9,6 +9,7 @@ object DriverSettings {
     var LOG_LEVEL: String? = null
     var PARAMS: Array<String> = arrayOf()
     var IMPLICIT_WAIT: Long = 10
+    var DOMAIN: String = ""
 
     /**
      * Initialize settings from property file
@@ -18,11 +19,12 @@ object DriverSettings {
         val properties: Properties? = PropertyReader.getProperties(TEST_PROPERTIES_PATH)
         //set properties from array
         BROWSER = properties!!.getProperty("driver")
-        URL = properties!!.getProperty("url")
-        LOG_LEVEL = properties!!.getProperty("log.level")
+        URL = properties.getProperty("url")
+        LOG_LEVEL = properties.getProperty("log.level")
         System.getProperty("params")?.let {
             PARAMS = System.getProperty("params").split(",").toTypedArray()
         }
-        IMPLICIT_WAIT = properties!!.getProperty("timeout.wait.element").toLong()
+        IMPLICIT_WAIT = properties.getProperty("timeout.wait.element").toLong()
+        DOMAIN = properties.getProperty("domain")
     }
 }

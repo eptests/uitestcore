@@ -21,10 +21,10 @@ object PropertyReader {
             propertiesPath
         }
 
-    fun readProperties(): Properties? {
+    private fun readProperties(): Properties? {
         properties = Properties()
         try {
-            inputStream = PropertyReader::class.java.getResourceAsStream(path)
+            inputStream = PropertyReader::class.java.getResourceAsStream(path!!)
             if (inputStream != null) {
                 properties!!.load(inputStream)
             }
@@ -40,7 +40,7 @@ object PropertyReader {
         return properties
     }
 
-    fun loadProperties(): Properties? {
+    private fun loadProperties(): Properties? {
         return if (properties != null) properties else readProperties()
     }
 

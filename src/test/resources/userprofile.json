@@ -1,0 +1,14 @@
+{
+  "NID": {
+    "value": "CgQI55AB",
+    "domain": ".google.com",
+    "isHttpOnly": false,
+    "date": "2300-12-31"
+  },
+  "SID": {
+    "value": "1wdKOqYwl4CAVOc2D9qsf5enWlFe9qgnzCVARA2LN91buA29lYiK1CfrqbrY_h__eeOUvg.",
+    "domain": ".google.com",
+    "path": "\/",
+    "isSecure": true
+  }
+}

@@ -1,9 +1,20 @@
 package com.uitestcore.driverutils
 
-import org.openqa.selenium.By
-import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
+/*import java.nio.file.Path
+import java.nio.file.Paths
+import java.awt.Robot
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+import java.awt.event.KeyEvent*/
+
+import com.uitestcore.driverutils.DriverSettings.BROWSER
+import com.uitestcore.driverutils.DriverSettings.IMPLICIT_WAIT
+import com.uitestcore.driverutils.DriverSettings.PARAMS
+import com.uitestcore.driverutils.DriverSettings.URL
+import com.uitestcore.driverutils.DriverSettings.DOMAIN
+import io.github.bonigarcia.wdm.WebDriverManager
+import io.qameta.allure.Step
+import org.openqa.selenium.*
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.logging.LogType
@@ -13,20 +24,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions.urlToBe
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
-
-/*import java.nio.file.Path
-import java.nio.file.Paths
-import java.awt.Robot
-import java.awt.Toolkit
-import java.awt.datatransfer.StringSelection
-import java.awt.event.KeyEvent*/
-
-import com.uitestcore.driverutils.DriverSettings.BROWSER
-import com.uitestcore.driverutils.DriverSettings.PARAMS
-import com.uitestcore.driverutils.DriverSettings.IMPLICIT_WAIT
-import com.uitestcore.driverutils.DriverSettings.URL
-import io.github.bonigarcia.wdm.WebDriverManager
-import io.qameta.allure.Step
+import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
 object Driver {
@@ -173,5 +171,39 @@ object Driver {
     @Step("Wait to redirect to url {url}")
     fun waitToRedirection(url: String) {
         Wait.until(urlToBe(url))
+    }
+
+    @Step("Set cookies")
+    fun setCookies(cookiesList : List<Cookie>) {
+        cookiesList.forEach {
+            this.instance.manage().addCookie(it)
+        }
+    }
+
+    @Step("Set cookies")
+    fun setCookies(cookie : Cookie) {
+        this.instance.manage().addCookie(cookie)
+    }
+
+    @Step("Set cookies")
+    fun setCookies(cookieValue : Pair<String, String>) {
+        val cookie: Cookie = Cookie.Builder(cookieValue.first, cookieValue.second)
+                .domain(DOMAIN)
+                .expiresOn(GregorianCalendar(3000, 10, 3).time)
+                .isHttpOnly(true)
+                .isSecure(false)
+                .path("/")
+                .build()
+        this.instance.manage().addCookie(cookie)
+    }
+
+    @Step("Get cookies")
+    fun getCookies(): Set<Cookie>? {
+        return this.instance.manage().cookies
+    }
+
+    @Step("Delete cookies")
+    fun deleteCookies() {
+        return this.instance.manage().deleteAllCookies()
     }
 }
