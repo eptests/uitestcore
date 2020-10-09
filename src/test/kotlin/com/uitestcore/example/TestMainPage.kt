@@ -3,7 +3,6 @@ package com.uitestcore.example
 import com.uitestcore.driverutils.CookieProfileReader
 import org.testng.annotations.Test
 import com.uitestcore.driverutils.Driver
-import com.uitestcore.driverutils.DriverSettings
 import org.testng.asserts.SoftAssert
 
 class TestMainPage : TestInit() {
