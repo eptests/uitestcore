@@ -133,12 +133,12 @@ object Driver {
         return instance.findElements(by)
     }
 
-    @Step("Get element {by} with class {T}")
+    @Step("Get element with class")
     fun <T : Any> findDecoratedElement(clazz: KClass<T>, by: By): T {
         return WebElementDecorator().decorate(clazz, this.findElement(by))
     }
 
-    @Step("Get elements {by} with class {clazz.name}")
+    @Step("Get elements with class")
     fun <T : Any> findDecoratedElements(clazz: KClass<T>, by: By): List<T> {
         return WebElementDecorator().decorate(clazz, this.findElements(by))
     }
