@@ -20,4 +20,12 @@ internal abstract class AbstractElement protected constructor(protected val wrap
     override fun scrollTo() {
         Driver.scrollToElement(wrappedElement)
     }
+
+    override fun jsFill(text: String) {
+        Driver.executeJS("arguments[0].value = '${text}'", wrappedElement)
+    }
+
+    override fun jsClick() {
+        Driver.executeJS("arguments[0].click()", wrappedElement)
+    }
 }

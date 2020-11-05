@@ -6,4 +6,8 @@ interface Element {
     val isExists: Boolean
 
     fun scrollTo()
+
+    fun jsFill(text: String)
+
+    fun jsClick()
 }

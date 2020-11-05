@@ -24,6 +24,7 @@ class MainPage : BasePage() {
     }
 
     fun enterTextAndAccept(text: String) {
+        //searchField!!.fillJS(text)
         searchField!!.clearAndType(text)
         Driver.findDecoratedElement(Button::class, By.cssSelector("[value='Поиск в Google']")).click()
     }
