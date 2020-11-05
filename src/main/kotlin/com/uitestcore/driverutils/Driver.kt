@@ -206,4 +206,14 @@ object Driver {
     fun deleteCookies() {
         return this.instance.manage().deleteAllCookies()
     }
+
+    @Step("Execute JS")
+    fun executeJS(script: String) {
+        jsExecutor.executeScript(script)
+    }
+
+    @Step("Execute JS")
+    fun executeJS(script: String, argument: WebElement) {
+        jsExecutor.executeScript(script, argument)
+    }
 }
