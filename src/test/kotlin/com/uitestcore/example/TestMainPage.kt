@@ -21,7 +21,7 @@ class TestMainPage : TestInit() {
         val results = resultsPage.getResults()
         val pfResult = resultsPage.getPFResult()
         val pfResults = resultsPage.getPFResults()
-        assert.assertEquals(results.size, 10)
+        assert.assertEquals(results.size, 11)
         result.getText()
         results[0].getText()
         pfResult.getText()
