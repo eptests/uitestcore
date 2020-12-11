@@ -128,6 +128,17 @@ object Driver {
         return instance.findElement(by)
     }
 
+    @Step("Check element {by} presents")
+    fun isElementExists(by: By): Boolean {
+        return try {
+            instance.findElement(by)
+            true
+        }
+        catch (ex: Exception) {
+            false
+        }
+    }
+
     @Step("Get elements {by}")
     fun findElements(by: By): List<WebElement> {
         return instance.findElements(by)

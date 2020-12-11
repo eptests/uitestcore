@@ -14,7 +14,7 @@ import java.util.*
 
 
 object Logger {
-    val screenShotPath: String = "..//Screenshots";
+    val screenShotPath: String = "//Screenshots";
     /**
      * Сделать скриншот текущего состояния браузера и сохранить в папку.
      * @see Base.CreateResultsDir
@@ -26,12 +26,12 @@ object Logger {
         return try {
             val scrShot = Driver.get() as TakesScreenshot
             //Call getScreenshotAs method to create image file
-            val SrcFile = scrShot.getScreenshotAs(OutputType.FILE)
+            val srcFile = scrShot.getScreenshotAs(OutputType.FILE)
             //Move image file to new destination
-            val imagePath: String = screenShotPath.toString() + "//" + fileName + ".jpg"
-            val DestFile = File(imagePath)
+            val imagePath: String = "$screenShotPath//$fileName.jpg"
+            val destFile = File(imagePath)
             //Copy file at destination
-            FileUtils.copyFile(SrcFile, DestFile)
+            FileUtils.copyFile(srcFile, destFile)
             imagePath
         } catch (e: java.lang.Exception) {
             println(e.message)
@@ -45,7 +45,7 @@ object Logger {
      * @param testName - название тесткейса.
      */
     @Throws(Exception::class)
-    public fun takeScreenshotToReport(testName: String) {
+    fun takeScreenshotToReport(testName: String) {
         if (testName == null)
             return;
         addScreenshotToReport(takeScreenshot(testName + "_fail"))
@@ -86,14 +86,14 @@ object Logger {
 
     fun actionOnTestComplete(testResult: Int, testName: String) {
         if (testResult == 2) {
-            Logger.actionOnFailure(testName)
+            actionOnFailure(testName)
         }
     }
 
     fun actionOnFailure(testName: String) {
-        Logger.takeScreenshotToReport(testName)
-        Logger.getConsoleLogs()
-        Logger.getPageSource()
+        takeScreenshotToReport(testName)
+        getConsoleLogs()
+        getPageSource()
     }
 
     /**
@@ -103,5 +103,18 @@ object Logger {
     @Attachment(value = "Page screenshot", type = "image/jpg")
     fun addScreenshotToReport(screenshotPath: String?): kotlin.ByteArray {
         return Files.readAllBytes(Paths.get(screenshotPath))
+    }
+
+    /**
+     * Сделать скриншт в формате BASE64
+     */
+    fun takeBase64Screenshot(): String? {
+        return try {
+            //Call getScreenshotAs method to create image file
+            (Driver.get() as TakesScreenshot).getScreenshotAs(OutputType.BASE64)
+        } catch (e: java.lang.Exception) {
+            println(e.message)
+            null
+        }
     }
 }
