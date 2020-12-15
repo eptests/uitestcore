@@ -14,7 +14,7 @@ import java.util.*
 
 
 object Logger {
-    val screenShotPath: String = "//Screenshots";
+    val screenShotPath: String = "/Screenshots";
     /**
      * Сделать скриншот текущего состояния браузера и сохранить в папку.
      * @see Base.CreateResultsDir
@@ -28,7 +28,7 @@ object Logger {
             //Call getScreenshotAs method to create image file
             val srcFile = scrShot.getScreenshotAs(OutputType.FILE)
             //Move image file to new destination
-            val imagePath: String = "$screenShotPath//$fileName.jpg"
+            val imagePath: String = System.getProperty("user.dir") + "$screenShotPath//$fileName.jpg"
             val destFile = File(imagePath)
             //Copy file at destination
             FileUtils.copyFile(srcFile, destFile)
