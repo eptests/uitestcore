@@ -1,12 +1,10 @@
-package com.uitestcore.example
+package com.uitestcore.example.pageobjects
 
 import com.uitestcore.driverutils.Driver
 import com.uitestcore.elementobjects.Button
 import com.uitestcore.pageobjects.BasePage
 import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
-import kotlin.reflect.KClass
 
 class ResultsPage : BasePage() {
     @FindBy(css="#pnnext > span:nth-child(2)")

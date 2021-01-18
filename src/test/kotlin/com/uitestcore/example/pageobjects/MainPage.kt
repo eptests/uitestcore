@@ -1,4 +1,4 @@
-package com.uitestcore.example
+package com.uitestcore.example.pageobjects
 
 import com.uitestcore.driverutils.Driver
 import com.uitestcore.elementobjects.Button

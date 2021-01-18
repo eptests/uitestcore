@@ -34,6 +34,14 @@ object Wait {
         wait.until(ExpectedConditions.visibilityOf(element))
     }
 
+    fun elementInvisibility(by: By){
+        wait.until(ExpectedConditions.invisibilityOf(Driver.findElement(by)))
+    }
+
+    fun elementInvisibility(element: WebElement){
+        wait.until(ExpectedConditions.invisibilityOf(element))
+    }
+
     fun titleIs(title: String){
         wait.until(ExpectedConditions.titleIs(title))
     }

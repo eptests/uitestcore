@@ -1,17 +1,10 @@
 package com.uitestcore.driverutils
 
-/*import java.nio.file.Path
-import java.nio.file.Paths
-import java.awt.Robot
-import java.awt.Toolkit
-import java.awt.datatransfer.StringSelection
-import java.awt.event.KeyEvent*/
-
 import com.uitestcore.driverutils.DriverSettings.BROWSER
+import com.uitestcore.driverutils.DriverSettings.DOMAIN
 import com.uitestcore.driverutils.DriverSettings.IMPLICIT_WAIT
 import com.uitestcore.driverutils.DriverSettings.PARAMS
 import com.uitestcore.driverutils.DriverSettings.URL
-import com.uitestcore.driverutils.DriverSettings.DOMAIN
 import io.github.bonigarcia.wdm.WebDriverManager
 import io.qameta.allure.Step
 import org.openqa.selenium.*
@@ -27,11 +20,11 @@ import java.util.logging.Level
 import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
+
 object Driver {
     private lateinit var instance: WebDriver
     private lateinit var baseUrl: String
     private lateinit var jsExecutor: JavascriptExecutor
-    //private lateinit var robot: Robot
 
     fun init(url: String) {
         baseUrl = url
@@ -42,7 +35,6 @@ object Driver {
         DriverSettings.initFromProfile()
         instance = createDriver(BROWSER)
         jsExecutor = instance as JavascriptExecutor
-        //robot = Robot()
         if (!this::baseUrl.isInitialized) {
             baseUrl = URL!!
         }
@@ -90,12 +82,17 @@ object Driver {
 
     @Step("Open {path} page")
     fun openPage(path: String) {
-        instance.get(baseUrl+path)
+        instance.get(baseUrl + path)
     }
 
     @Step("Reload page")
     fun reloadPage() {
         instance.navigate().refresh()
+    }
+
+    @Step("Get page title")
+    fun getPageTitle(): String {
+        return instance.title
     }
 
     @Step("Get element {id}")
@@ -164,40 +161,25 @@ object Driver {
         Thread.sleep(time * 1000)
     }
 
-    //Doesn't work in headless mode
-    /*fun uploadFile(element: WebElement, filePath: String) {
-        val resourceDirectory: Path = Paths.get("src", "test", "resources")
-        val absolutePath: String = resourceDirectory.toFile().absolutePath
-        element!!.click()
-
-        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(absolutePath + filePath), null)
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
-    }*/
-
     @Step("Wait to redirect to url {url}")
     fun waitToRedirection(url: String) {
         Wait.until(urlToBe(url))
     }
 
     @Step("Set cookies")
-    fun setCookies(cookiesList : List<Cookie>) {
+    fun setCookies(cookiesList: List<Cookie>) {
         cookiesList.forEach {
             this.instance.manage().addCookie(it)
         }
     }
 
     @Step("Set cookies")
-    fun setCookies(cookie : Cookie) {
+    fun setCookies(cookie: Cookie) {
         this.instance.manage().addCookie(cookie)
     }
 
     @Step("Set cookies")
-    fun setCookies(cookieValue : Pair<String, String>) {
+    fun setCookies(cookieValue: Pair<String, String>) {
         val cookie: Cookie = Cookie.Builder(cookieValue.first, cookieValue.second)
                 .domain(DOMAIN)
                 .expiresOn(GregorianCalendar(3000, 10, 3).time)
@@ -226,5 +208,9 @@ object Driver {
     @Step("Execute JS")
     fun executeJS(script: String, argument: WebElement) {
         jsExecutor.executeScript(script, argument)
+    }
+
+    fun takeFullScreenshot(screenshotName: String): String {
+        return ScreenshotUtils.takeAndSaveFullScreenshot(screenshotName, "Screenshots")
     }
 }

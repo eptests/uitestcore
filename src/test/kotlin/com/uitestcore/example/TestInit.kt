@@ -1,5 +1,6 @@
 package com.uitestcore.example
 
+import com.uitestcore.annotation.VisualTest
 import com.uitestcore.driverutils.Driver
 import com.uitestcore.driverutils.Logger
 import org.testng.ITestResult

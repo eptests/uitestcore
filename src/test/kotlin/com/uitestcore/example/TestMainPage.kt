@@ -3,6 +3,8 @@ package com.uitestcore.example
 import com.uitestcore.driverutils.CookieProfileReader
 import org.testng.annotations.Test
 import com.uitestcore.driverutils.Driver
+import com.uitestcore.example.pageobjects.MainPage
+import com.uitestcore.example.pageobjects.ResultsPage
 import org.testng.asserts.SoftAssert
 
 class TestMainPage : TestInit() {
@@ -21,7 +23,7 @@ class TestMainPage : TestInit() {
         val results = resultsPage.getResults()
         val pfResult = resultsPage.getPFResult()
         val pfResults = resultsPage.getPFResults()
-        assert.assertEquals(results.size, 11)
+        assert.assertEquals(results.size, 10)
         result.getText()
         results[0].getText()
         pfResult.getText()

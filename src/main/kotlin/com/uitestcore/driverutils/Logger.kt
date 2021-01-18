@@ -14,11 +14,9 @@ import java.util.*
 
 
 object Logger {
-    val screenShotPath: String = "/Screenshots";
+    val screenShotPath: String = "/Screenshots"
     /**
      * Сделать скриншот текущего состояния браузера и сохранить в папку.
-     * @see Base.CreateResultsDir
-     *
      * @param fileName - название файла.
      */
     @Throws(java.lang.Exception::class)
@@ -40,15 +38,12 @@ object Logger {
     }
 
     /**
-     * Обертка для [Base.TakeAreaScreenshot].
      * Формирует имя скриншота для отчета.
      * @param testName - название тесткейса.
      */
     @Throws(Exception::class)
     fun takeScreenshotToReport(testName: String) {
-        if (testName == null)
-            return;
-        addScreenshotToReport(takeScreenshot(testName + "_fail"))
+        takeScreenshot(testName + "_fail")?.let { addScreenshotToReport(it) }
     }
 
     /**
@@ -56,7 +51,7 @@ object Logger {
      */
     @Attachment(value = "Page sorce")
     fun getPageSource(): String? {
-        return Driver.get().getPageSource()
+        return Driver.get().pageSource
     }
 
     /**
@@ -66,7 +61,7 @@ object Logger {
     fun getConsoleLogs(): StringBuilder? {
         val logs = StringBuilder()
         logs.append("***** Browser Console Logs: *****\n")
-        val browserLogEntries: LogEntries? = Driver.get()?.manage()?.logs()?.get(LogType.BROWSER)
+        val browserLogEntries: LogEntries? = Driver.get().manage()?.logs()?.get(LogType.BROWSER)
         if (browserLogEntries != null) {
             for (entry in browserLogEntries) {
                 val entryStr: String =
@@ -101,7 +96,7 @@ object Logger {
      * @param screenshotPath - путь к скришоту.
      */
     @Attachment(value = "Page screenshot", type = "image/jpg")
-    fun addScreenshotToReport(screenshotPath: String?): kotlin.ByteArray {
+    fun addScreenshotToReport(screenshotPath: String): ByteArray {
         return Files.readAllBytes(Paths.get(screenshotPath))
     }
 

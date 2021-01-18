@@ -1,4 +1,4 @@
-package com.uitestcore.example
+package com.uitestcore.example.pageobjects
 
 import com.uitestcore.containers.AbstractContainer
 import com.uitestcore.elementobjects.Button
