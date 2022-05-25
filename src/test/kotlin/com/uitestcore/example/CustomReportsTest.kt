@@ -33,6 +33,7 @@ class CustomReportsTest: TestInit() {
         Assert.assertEquals("Google", Driver.getPageTitle())
     }
 
+    //Method to create html report after comparing screenshots
     @AfterMethod
     @Throws(Exception::class)
     fun getResult(result: ITestResult) {
